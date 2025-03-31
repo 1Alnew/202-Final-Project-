@@ -1,0 +1,19 @@
+---
+title: "Project Proposal"
+output: html_document
+---
+
+Data topic: Health outcomes by demographic information 
+Team Members: Ashlynn Prisby, Benjamin Herschel, Adrian Newgard 
+Our data comes from the CDC and lists the probabilities of various health outcomes, such as asthma, and demographic information, as well as age. Initial cleaning has included removing redundant columns, as several columns contain only 1 value. We have also looked at which values are found in the demographic data; the data is formatted a long way, so to find information on the included information means sorting through variable values. 
+Our questions will focus on severe asthma and identifying commonalities between sufferers of severe asthma. This will include considerations of age, of years of observation, gender, and race. 
+
+```{r}
+library(readr)
+data <- read_csv("https://raw.githubusercontent.com/1Alnew/202-Final-Project-/refs/heads/main/Health_conditions_among_children_under_age_18__by_selected_characteristics__United_States.csv")
+print(unique(data$INDICATOR))
+data <- subset(data, select = -c(INDICATOR, UNIT, UNIT_NUM))
+print(unique(data$PANEL))
+data
+```
+
