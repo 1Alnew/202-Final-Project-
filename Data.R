@@ -1,6 +1,4 @@
 library(readr)
-data <- read_csv("Health_conditions_among_children_under_age_18__by_selected_characteristics__United_States.csv")
-print(unique(data$INDICATOR))
-data <- subset(data, select = -INDICATOR)
-print(unique(data$FLAG))
+library(tidyverse)
+data <- read_csv("https://raw.githubusercontent.com/1Alnew/202-Final-Project-/refs/heads/main/Crime_Incidents_in_2024.csv")
 
