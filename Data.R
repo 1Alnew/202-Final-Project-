@@ -9,3 +9,4 @@ unique(data$OFFENSE)
 data <- data %>%  select(-OCTO_RECORD_ID)
 data$DISTRICT <- as.character(data$DISTRICT)
 data$WARD <- as.character(data$WARD)
+
