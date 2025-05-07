@@ -25,7 +25,11 @@ data$WARD <- as.character(data$WARD)
 
 
 # Washington DC Crime Analysis
+<<<<<<< HEAD
 ## Adrian Newgard, Benjamin , Ashlynn Prisby  
+=======
+## Adrian Newgard, Benjamin Herschel, Ashlynn 
+>>>>>>> d7f778a3d7f15b741d70021c63caca11c743e90a
 
 [intro] 
 
