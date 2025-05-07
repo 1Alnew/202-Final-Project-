@@ -3,8 +3,6 @@ title: "Washington DC Crime Analysis"
 output: html_document
 ---
 
-Hello world
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(readr)
