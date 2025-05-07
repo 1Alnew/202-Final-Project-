@@ -1,11 +1,41 @@
 ---
-title: "Project Proposal"
+title: "Washington DC Crime Analysis"
 output: html_document
 ---
 
 
 
-```{r}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 library(readr)
+library(tidyverse)
 ```
 
+# Washington DC Crime Analysis
+## Adrian Newgard, Benjamin , Ashlynn 
+
+[intro] 
+
+###Question 1 
+
+[content]
+
+###Question 2 
+
+[content]
+
+###Question 3 
+
+[content]
+
+###Question 4 
+
+[content]
+
+###Question 5 
+
+[content]
+
+###Question 6 
+
+[content]
