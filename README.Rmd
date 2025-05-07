@@ -12,7 +12,7 @@ library(tidyverse)
 ```
 
 # Washington DC Crime Analysis
-## Adrian Newgard, Benjamin , Ashlynn 
+## Adrian Newgard, Benjamin Herschel, Ashlynn 
 
 [intro] 
 
