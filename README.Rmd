@@ -9,21 +9,6 @@ library(readr)
 library(tidyverse)
 ```
 
-```{r, include=FALSE}
-library(readr)
-library(tidyverse)
-data <- read_csv("https://raw.githubusercontent.com/1Alnew/202-Final-Project-/refs/heads/main/Crime_Incidents_in_2024.csv")
-#link to web page: https://opendata.dc.gov/datasets/DCGIS::crime-incidents-in-2024/about
-view(data)
-dim(data)
-summary(data)
-unique(data$OFFENSE)
-data <- data %>%  select(-OCTO_RECORD_ID)
-data$DISTRICT <- as.character(data$DISTRICT)
-data$WARD <- as.character(data$WARD)
-```
-
-
 # Washington DC Crime Analysis
 <<<<<<< HEAD
 ## Adrian Newgard, Benjamin , Ashlynn Prisby  
@@ -32,6 +17,17 @@ data$WARD <- as.character(data$WARD)
 >>>>>>> d7f778a3d7f15b741d70021c63caca11c743e90a
 
 [intro] 
+
+## Cleaning 
+
+```{r}
+data <- read_csv("https://raw.githubusercontent.com/1Alnew/202-Final-Project-/refs/heads/main/Crime_Incidents_in_2024.csv")
+data <- data %>%  select(-OCTO_RECORD_ID)
+data$DISTRICT <- as.character(data$DISTRICT)
+data$WARD <- as.character(data$WARD)
+```
+
+## Variables 
 
 ###Question 1 
 
