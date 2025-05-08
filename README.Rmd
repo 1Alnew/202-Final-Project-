@@ -29,9 +29,30 @@ data$WARD <- as.character(data$WARD)
 
 ## Variables 
 
-###Question 1 
+##Research Questions
 
-[content]
+### Does the poverty rate of a ward effect the amount of crimes observed there?
+
+To answer this question, the use of another dataset is required. These data come from a set published by the city of Washington DC and gathered by the American Community Survey. They contain a variety of statistics sorted by ward in the city, but for this analysis the only variable in consideration is `DP03_0128PE`, which gives percentage of a ward's population which fell below the poverty line in the previous 12 months at the time of the data's collection. 
+The data reveals that, counter to what we would expect, the areas with the highest crimes observed--remember, in this dataset, they are from police encounters--are not actually in the areas with the greatest poverty. However, where the most police encounters take place makes sense when one considers what is in wards 2 and 5 particularly: high profile government buildings like the White House and the Capitol. It seems to be that police are focusing heavily on these areas to the exclusion of, or perhaps simply ignoring, more impoverished areas.
+
+```{r}
+econ <- read_csv("https://raw.githubusercontent.com/1Alnew/202-Final-Project-/refs/heads/main/ACS_5-Year_Economic_Characteristics_DC_Ward.csv") 
+ward_poverty <- econ[c('NAME', 'DP03_0128PE')]
+ward_poverty$NAME <- parse_number(ward_poverty$NAME)
+colnames(ward_poverty)[colnames(ward_poverty) == 'NAME'] <- 'WARD'
+colnames(ward_poverty)[colnames(ward_poverty) == 'DP03_0128PE'] <- '% impoverished'
+ward_poverty$WARD <- as.character(ward_poverty$WARD)
+wards <- data %>% drop_na(WARD) %>% count(WARD)
+wards <- full_join(wards, ward_poverty, by = "WARD")
+ggplot(
+  wards,
+  aes(x=WARD, y=n, fill=`% impoverished`)
+)+geom_col()+
+  scale_fill_gradient(low="#fc96ec", high = "#7c0069")+
+  labs(y = "No. of Crimes", x = "Ward")
+```
+
 
 ###Does the time of day affect where these crimes are committed? 
 
