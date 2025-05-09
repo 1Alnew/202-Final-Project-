@@ -32,11 +32,20 @@ ggplot(
   scale_fill_gradient(low="#fc96ec", high = "#7c0069")+
   labs(y = "No. of Crimes", x = "Ward")
   
-
+# Filtering to make finding block which contains White House easier
+penn <- data %>% filter(grepl("PENNSYLVANIA AVENUE", data$BLOCK, fixed = TRUE))
+#unique(penn$BLOCK) Looking at values to find which contains the White House
+penn <- penn %>% filter(BLOCK == "1500 - 1649 BLOCK OF PENNSYLVANIA AVENUE SE")
+penn %>%  ggplot(
+  aes(x=OFFENSE, fill=OFFENSE)
+)+geom_bar()+
+  theme(axis.text.x=element_blank())+
+  labs(title="Crimes on the White House Block")
 
 capitol <- data %>% filter(BID == "CAPITOL HILL")
 capitol %>%  ggplot(
   aes(x=OFFENSE, fill=OFFENSE)
 )+geom_bar()+
-  theme(axis.text.x=element_blank())
+  theme(axis.text.x=element_blank())+
+  labs(title="Crimes on Capitol Hill")
 
