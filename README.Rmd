@@ -259,6 +259,7 @@ penn %>%  ggplot(
 Then, the Capitol. The data has a built-in indicator for whether a crime took place on Capitol Hill. 
 ```{r}
 capitol <- data %>% filter(BID == "CAPITOL HILL")
+dim(capitol)
 capitol %>%  ggplot(
   aes(x=OFFENSE, fill=OFFENSE)
 )+geom_bar()+
@@ -266,6 +267,6 @@ capitol %>%  ggplot(
   labs(title="Crimes on Capitol Hill")
 ```
 
-We see that there are many more crimes recorded around Capitol Hill than the White House. There a couple of possibilities for why this might be. One could be that the heavier security at the White House acts to keep more criminals away from the building than does the security at the Capitol. It could also be that there is simply more opportunity to commit crims in the Capitol Hill area.
+We see that there are many more crimes recorded around Capitol Hill than the White House. Total, there are 437. There a couple of possibilities for why this might be. One could be that the heavier security at the White House acts to keep more criminals away from the building than does the security at the Capitol. It could also be that there is simply more opportunity to commit crims in the Capitol Hill area.
 
 ## Conclusion
