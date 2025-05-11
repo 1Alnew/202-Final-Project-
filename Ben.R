@@ -11,6 +11,7 @@ data$WARD <- as.character(data$WARD)
 view(data)
 summary(data)
 
+
 data <- data %>%
   filter(!is.na(SHIFT), !is.na(OFFENSE), !is.na(METHOD))
 
@@ -21,7 +22,7 @@ data <- data %>%
     METHOD = as.factor(METHOD)
   )
 
-# 1a
+# 1a: Crime frequency by shift
 ggplot(data, aes(x = SHIFT)) +
   geom_bar(fill = "steelblue") +
   labs(
