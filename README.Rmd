@@ -29,7 +29,7 @@ data$WARD <- as.character(data$WARD)
 
 ## Variables 
 
-##Research Questions
+## Research Questions
 
 ### Does the poverty rate of a ward effect the amount of crimes observed there?
 
@@ -54,7 +54,7 @@ ggplot(
 ```
 
 
-###Does the time of day affect where these crimes are committed? 
+### Does the time of day affect where these crimes are committed? 
 
 ```{r}
 library(ggplot2)
@@ -128,7 +128,7 @@ ggplot(filtered_crime, aes(x = BLOCK, y = count, fill = SHIFT)) +
 
 [content
 
-###Are there known neighborhoods for a certain crime for that area? 
+### Are there known neighborhoods for a certain crime for that area? 
 
 ```{r}
 neighborhood_crimes <- data %>%
@@ -201,7 +201,7 @@ data %>%
 
 [content]
 
-###Question 5 
+### Question 5 
 
 ```{r}
 
@@ -240,7 +240,7 @@ data %>%
 
 [content]
 
-###How many and what crimes occur near the White House and Capitol?
+### How many and what crimes occur near the White House and Capitol?
 
 In addition to providing an interesting insight into what goes on around the seat of the Federal Government, this question can make a comparison between the two that may reveal how the public interacts with them differently. 
 Firstly, the White House. 
@@ -267,3 +267,5 @@ capitol %>%  ggplot(
 ```
 
 We see that there are many more crimes recorded around Capitol Hill than the White House. There a couple of possibilities for why this might be. One could be that the heavier security at the White House acts to keep more criminals away from the building than does the security at the Capitol. It could also be that there is simply more opportunity to commit crims in the Capitol Hill area.
+
+## Conclusion
