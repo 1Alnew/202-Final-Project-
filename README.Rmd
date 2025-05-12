@@ -193,6 +193,10 @@ ggplot(data, aes(x = SHIFT)) +
   ) +
   theme_minimal()
 
+```
+
+```{r, echo=FALSE}
+
 # 1b
 top_offenses <- data %>%
   count(OFFENSE, sort = TRUE) %>%
