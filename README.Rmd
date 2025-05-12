@@ -34,7 +34,7 @@ data$DISTRICT <- as.character(data$DISTRICT)
 data$WARD <- as.character(data$WARD)
 ```
 
-## Variables 
+### Variables 
 
 ```{r}
 colnames(data)
