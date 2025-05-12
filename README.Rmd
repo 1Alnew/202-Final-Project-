@@ -16,9 +16,16 @@ library(tidyverse)
 ## Adrian Newgard, Benjamin Herschel, Ashlynn 
 >>>>>>> d7f778a3d7f15b741d70021c63caca11c743e90a
 
-[intro] 
+As the nation's capitol, Washington, D.C. is an interesting area to study socially. In addition to being the capitol, the city is also part of a large metropolis and contains the usual economic variations therein. This analysis is focused on incidences of crime in Washington. It will consider economic, locational, and temporal factors to take a closer look at the kinds of crime that occur in one of the world's most important cities. 
 
-## Cleaning 
+## Data
+
+Our primary data is sourced from data.gov, and was provided by the city of Washington, D.C. It contains incidences of crimes as reported to and encountered by the Washington police department, covering the year 2024. 
+A secondary dataset was also used, from the American Communities Survey. It is discussed in question 1 of the 'Research Questions' section. 
+
+### Cleaning 
+
+Cleaning for the data consisted of removing an empty row and converting some character values to more convienent classes. During the analysis itself, some additional cleaning was required, such as using `na.rm` for some functions.
 
 ```{r}
 data <- read_csv("https://raw.githubusercontent.com/1Alnew/202-Final-Project-/refs/heads/main/Crime_Incidents_in_2024.csv")
@@ -29,7 +36,15 @@ data$WARD <- as.character(data$WARD)
 
 ## Variables 
 
-##Research Questions
+```{r}
+colnames(data)
+```
+The data contains a number of useful data points, including: 
+- `OFFENSE`: The type of crime committed 
+- `DISTRICT`, `WARD`, and `BLOCK`: Locational data of varying specificity. Useful for analysis at different levels. 
+- `SHIFT`: The time of day that the crime took place.
+
+## Research Questions
 
 ### Does the poverty rate of a ward effect the amount of crimes observed there?
 
@@ -54,7 +69,7 @@ ggplot(
 ```
 
 
-###Does the time of day affect where these crimes are committed? 
+### Does the time of day affect where these crimes are committed? 
 
 ```{r}
 library(ggplot2)
@@ -128,7 +143,7 @@ ggplot(filtered_crime, aes(x = BLOCK, y = count, fill = SHIFT)) +
 
 [content
 
-###Are there known neighborhoods for a certain crime for that area? 
+### Are there known neighborhoods for a certain crime for that area? 
 
 ```{r}
 neighborhood_crimes <- data %>%
@@ -157,15 +172,90 @@ ggplot(neighborhood_crimes, aes(x = NEIGHBORHOOD_CLUSTER, y = count, fill = OFFE
 
 [content]
 
-###Question 4 
+```{r}
+
+data <- data %>%
+  filter(!is.na(SHIFT), !is.na(OFFENSE), !is.na(METHOD))
+
+data <- data %>%
+  mutate(
+    SHIFT = as.factor(SHIFT),
+    OFFENSE = as.factor(OFFENSE),
+    METHOD = as.factor(METHOD)
+  )
+
+# 1a: Crime frequency by shift
+ggplot(data, aes(x = SHIFT)) +
+  geom_bar(fill = "steelblue") +
+  labs(
+    title = "Crime Frequency by Shift",
+    x = "Shift",
+    y = "Number of Crimes"
+  ) +
+  theme_minimal()
+
+# 1b
+top_offenses <- data %>%
+  count(OFFENSE, sort = TRUE) %>%
+  top_n(5, n) %>%
+  pull(OFFENSE)
+
+data %>%
+  filter(OFFENSE %in% top_offenses) %>%
+  ggplot(aes(x = SHIFT, fill = OFFENSE)) +
+  geom_bar(position = "dodge") +
+  labs(
+    title = "Top 5 Crime Types by Shift",
+    x = "Shift",
+    y = "Number of Crimes",
+    fill = "Offense Type"
+  ) +
+  theme_minimal()
+
+```
 
 [content]
 
-###Question 5 
+### Question 5 
+
+```{r}
+
+# 2b
+data %>%
+  filter(OFFENSE %in% top_offenses) %>%
+  ggplot(aes(x = METHOD, fill = OFFENSE)) +
+  geom_bar(position = "dodge") +
+  facet_wrap(~ OFFENSE, scales = "free_x") +
+  labs(
+    title = "Common Methods Used by Top 5 Crime Types",
+    x = "Method",
+    y = "Number of Crimes",
+    fill = "Offense"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# 2b (LOG)
+data %>%
+  filter(OFFENSE %in% top_offenses) %>%
+  ggplot(aes(x = METHOD, fill = OFFENSE)) +
+  geom_bar(position = "dodge") +
+  facet_wrap(~ OFFENSE, scales = "free_x") +
+  scale_y_log10() +
+  labs(
+    title = "Common Methods Used by Top 5 Crime Types (Log Scale)",
+    x = "Method",
+    y = "Log10(Number of Crimes)",
+    fill = "Offense"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
 
 [content]
 
-###How many and what crimes occur near the White House and Capitol?
+### How many and what crimes occur near the White House and Capitol?
 
 In addition to providing an interesting insight into what goes on around the seat of the Federal Government, this question can make a comparison between the two that may reveal how the public interacts with them differently. 
 Firstly, the White House. 
@@ -184,6 +274,7 @@ penn %>%  ggplot(
 Then, the Capitol. The data has a built-in indicator for whether a crime took place on Capitol Hill. 
 ```{r}
 capitol <- data %>% filter(BID == "CAPITOL HILL")
+dim(capitol)
 capitol %>%  ggplot(
   aes(x=OFFENSE, fill=OFFENSE)
 )+geom_bar()+
@@ -191,4 +282,6 @@ capitol %>%  ggplot(
   labs(title="Crimes on Capitol Hill")
 ```
 
-We see that there are many more crimes recorded around Capitol Hill than the White House. There a couple of possibilities for why this might be. One could be that the heavier security at the White House acts to keep more criminals away from the building than does the security at the Capitol. It could also be that there is simply more opportunity to commit crims in the Capitol Hill area.
+We see that there are many more crimes recorded around Capitol Hill than the White House. Total, there are 437. There a couple of possibilities for why this might be. One could be that the heavier security at the White House acts to keep more criminals away from the building than does the security at the Capitol. It could also be that there is simply more opportunity to commit crims in the Capitol Hill area.
+
+## Conclusion
