@@ -7,8 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(readr)
 library(tidyverse)
-library(ggplot2)
-library(dplyr)
+library(RColorBrewer)
 ```
 
 # Washington DC Crime Analysis
@@ -268,6 +267,7 @@ penn %>%  ggplot(
   aes(x=OFFENSE, fill=OFFENSE)
 )+geom_bar()+
   theme(axis.text.x=element_blank())+
+  scale_fill_brewer(palette = "Set3")+
   labs(title="Crimes on the White House Block")
 ```
 
@@ -276,10 +276,12 @@ Then, the Capitol. The data has a built-in indicator for whether a crime took pl
 capitol <- data %>% filter(BID == "CAPITOL HILL")
 dim(capitol)
 capitol %>%  ggplot(
-  aes(x=OFFENSE, fill=OFFENSE)
+  aes(x=reorder(factor(OFFENSE), OFFENSE, length), fill=OFFENSE)
 )+geom_bar()+
+  scale_fill_brewer(palette = "Set3")+
   theme(axis.text.x=element_blank())+
-  labs(title="Crimes on Capitol Hill")
+  labs(title="Crimes on Capitol Hill",
+       x = "Crime")
 ```
 
 We see that there are many more crimes recorded around Capitol Hill than the White House. Total, there are 437. There a couple of possibilities for why this might be. One could be that the heavier security at the White House acts to keep more criminals away from the building than does the security at the Capitol. It could also be that there is simply more opportunity to commit crims in the Capitol Hill area.
