@@ -16,9 +16,16 @@ library(tidyverse)
 ## Adrian Newgard, Benjamin Herschel, Ashlynn 
 >>>>>>> d7f778a3d7f15b741d70021c63caca11c743e90a
 
-[intro] 
+As the nation's capitol, Washington, D.C. is an interesting area to study socially. In addition to being the capitol, the city is also part of a large metropolis and contains the usual economic variations therein. This analysis is focused on incidences of crime in Washington. It will consider economic, locational, and temporal factors to take a closer look at the kinds of crime that occur in one of the world's most important cities. 
 
-## Cleaning 
+## Data
+
+Our primary data is sourced from data.gov, and was provided by the city of Washington, D.C. It contains incidences of crimes as reported to and encountered by the Washington police department, covering the year 2024. 
+A secondary dataset was also used, from the American Communities Survey. It is discussed in question 1 of the 'Research Questions' section. 
+
+### Cleaning 
+
+Cleaning for the data consisted of removing an empty row and converting some character values to more convienent classes. During the analysis itself, some additional cleaning was required, such as using `na.rm` for some functions.
 
 ```{r}
 data <- read_csv("https://raw.githubusercontent.com/1Alnew/202-Final-Project-/refs/heads/main/Crime_Incidents_in_2024.csv")
@@ -28,6 +35,14 @@ data$WARD <- as.character(data$WARD)
 ```
 
 ## Variables 
+
+```{r}
+colnames(data)
+```
+The data contains a number of useful data points, including: 
+- `OFFENSE`: The type of crime committed 
+- `DISTRICT`, `WARD`, and `BLOCK`: Locational data of varying specificity. Useful for analysis at different levels. 
+- `SHIFT`: The time of day that the crime took place.
 
 ## Research Questions
 
