@@ -7,6 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(readr)
 library(tidyverse)
+library(RColorBrewer)
 ```
 
 # Washington DC Crime Analysis
@@ -27,16 +28,16 @@ A secondary dataset was also used, from the American Communities Survey. It is d
 
 Cleaning for the data consisted of removing an empty row and converting some character values to more convienent classes. During the analysis itself, some additional cleaning was required, such as using `na.rm` for some functions.
 
-```{r}
+```{r, echo=FALSE}
 data <- read_csv("https://raw.githubusercontent.com/1Alnew/202-Final-Project-/refs/heads/main/Crime_Incidents_in_2024.csv")
 data <- data %>%  select(-OCTO_RECORD_ID)
 data$DISTRICT <- as.character(data$DISTRICT)
 data$WARD <- as.character(data$WARD)
 ```
 
-## Variables 
+### Variables 
 
-```{r}
+```{r, echo=FALSE}
 colnames(data)
 ```
 The data contains a number of useful data points, including: 
@@ -51,7 +52,7 @@ The data contains a number of useful data points, including:
 To answer this question, the use of another dataset is required. These data come from a set published by the city of Washington DC and gathered by the American Community Survey. They contain a variety of statistics sorted by ward in the city, but for this analysis the only variable in consideration is `DP03_0128PE`, which gives percentage of a ward's population which fell below the poverty line in the previous 12 months at the time of the data's collection. 
 The data reveals that, counter to what we would expect, the areas with the highest crimes observed--remember, in this dataset, they are from police encounters--are not actually in the areas with the greatest poverty. However, where the most police encounters take place makes sense when one considers what is in wards 2 and 5 particularly: high profile government buildings like the White House and the Capitol. It seems to be that police are focusing heavily on these areas to the exclusion of, or perhaps simply ignoring, more impoverished areas.
 
-```{r}
+```{r, echo=FALSE}
 econ <- read_csv("https://raw.githubusercontent.com/1Alnew/202-Final-Project-/refs/heads/main/ACS_5-Year_Economic_Characteristics_DC_Ward.csv") 
 ward_poverty <- econ[c('NAME', 'DP03_0128PE')]
 ward_poverty$NAME <- parse_number(ward_poverty$NAME)
@@ -71,10 +72,7 @@ ggplot(
 
 ### Does the time of day affect where these crimes are committed? 
 
-```{r}
-library(ggplot2)
-library(dplyr)
-
+```{r, echo=FALSE}
 
 day_crime <- data %>%
   group_by(SHIFT,BLOCK) %>%
@@ -102,7 +100,8 @@ ggplot(top_10_per_shift, aes(x = BLOCK, y = count, fill = SHIFT)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-```{r}
+
+```{r, echo=FALSE}
 top_10_per_shift$BLOCK <- sub("___.*$", "", top_10_per_shift$BLOCK)
 
 
@@ -145,7 +144,7 @@ ggplot(filtered_crime, aes(x = BLOCK, y = count, fill = SHIFT)) +
 
 ### Are there known neighborhoods for a certain crime for that area? 
 
-```{r}
+```{r, echo=FALSE}
 neighborhood_crimes <- data %>%
   count(OFFENSE,NEIGHBORHOOD_CLUSTER, name = "count")
 
@@ -172,7 +171,7 @@ ggplot(neighborhood_crimes, aes(x = NEIGHBORHOOD_CLUSTER, y = count, fill = OFFE
 
 [content]
 
-```{r}
+```{r, echo=FALSE}
 
 data <- data %>%
   filter(!is.na(SHIFT), !is.na(OFFENSE), !is.na(METHOD))
@@ -184,7 +183,7 @@ data <- data %>%
     METHOD = as.factor(METHOD)
   )
 
-# 1a: Crime frequency by shift
+# 1a
 ggplot(data, aes(x = SHIFT)) +
   geom_bar(fill = "steelblue") +
   labs(
@@ -193,6 +192,10 @@ ggplot(data, aes(x = SHIFT)) +
     y = "Number of Crimes"
   ) +
   theme_minimal()
+
+```
+
+```{r, echo=FALSE}
 
 # 1b
 top_offenses <- data %>%
@@ -218,7 +221,7 @@ data %>%
 
 ### Question 5 
 
-```{r}
+```{r, echo=FALSE}
 
 # 2b
 data %>%
@@ -259,7 +262,7 @@ data %>%
 
 In addition to providing an interesting insight into what goes on around the seat of the Federal Government, this question can make a comparison between the two that may reveal how the public interacts with them differently. 
 Firstly, the White House. 
-```{r}
+```{r, echo=FALSE}
 # Filtering to make finding block which contains White House easier
 penn <- data %>% filter(grepl("PENNSYLVANIA AVENUE", data$BLOCK, fixed = TRUE))
 #unique(penn$BLOCK) Looking at values to find which contains the White House
@@ -268,20 +271,25 @@ penn %>%  ggplot(
   aes(x=OFFENSE, fill=OFFENSE)
 )+geom_bar()+
   theme(axis.text.x=element_blank())+
+  scale_fill_brewer(palette = "Set3")+
   labs(title="Crimes on the White House Block")
 ```
 
 Then, the Capitol. The data has a built-in indicator for whether a crime took place on Capitol Hill. 
-```{r}
+```{r, echo=FALSE}
 capitol <- data %>% filter(BID == "CAPITOL HILL")
 dim(capitol)
 capitol %>%  ggplot(
-  aes(x=OFFENSE, fill=OFFENSE)
+  aes(x=reorder(factor(OFFENSE), OFFENSE, length), fill=OFFENSE)
 )+geom_bar()+
+  scale_fill_brewer(palette = "Set3")+
   theme(axis.text.x=element_blank())+
-  labs(title="Crimes on Capitol Hill")
+  labs(title="Crimes on Capitol Hill",
+       x = "Crime")
 ```
 
 We see that there are many more crimes recorded around Capitol Hill than the White House. Total, there are 437. There a couple of possibilities for why this might be. One could be that the heavier security at the White House acts to keep more criminals away from the building than does the security at the Capitol. It could also be that there is simply more opportunity to commit crims in the Capitol Hill area.
 
 ## Conclusion
+
+It is evident that the uniqueness of Washinton's purpose as a city leads to some unexpected occurences in the data. The presence of the seats of government in the city--the White House, the Capitol, etc.--leads to increased presence around those areas. The result is an uneven police distribution across the city in a manner different from other cities. However, D.C. suffers similar problems to other cities. 
