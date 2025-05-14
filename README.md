@@ -3,7 +3,7 @@ Washington DC Crime Analysis
 
 # Washington DC Crime Analysis
 
-## Adrian Newgard, Benjamin Herschel, Ashlynn
+## Adrian Newgard, Benjamin Herschel, Ashlynn Prisby
 
 As the nation’s capitol, Washington, D.C. is an interesting area to
 study socially. In addition to being the capitol, the city is also part
