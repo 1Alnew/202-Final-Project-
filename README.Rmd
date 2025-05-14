@@ -75,7 +75,7 @@ ggplot(
 ```{r, echo=FALSE}
 library(RColorBrewer)
 day_crime <- data %>%
-  group_by(SHIFT,BLOCK) %>%
+  group_by(SHIFT,BLOCK,LONGITUDE,LATITUDE) %>%
   summarise(count =n(),.groups = "drop")
 
   
@@ -102,9 +102,12 @@ ggplot(top_10_per_shift, aes(x = BLOCK, y = count, fill = SHIFT)) +
   theme_minimal() +
   scale_fill_brewer(palette = "Set3") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
 ```
 
 ```{r, echo=FALSE}
+
 top_10_per_shift$BLOCK <- sub("___.*$", "", top_10_per_shift$BLOCK)
 
 
@@ -129,7 +132,6 @@ excluded_locations <- c(
 filtered_crime <- top_10_per_shift %>%
   filter(!BLOCK %in% excluded_locations)
 
-
 ggplot(filtered_crime, aes(x = BLOCK, y = count, fill = SHIFT)) +
   geom_col(show.legend = FALSE) +
   facet_wrap(~SHIFT, scales = "free") +
@@ -140,7 +142,45 @@ ggplot(filtered_crime, aes(x = BLOCK, y = count, fill = SHIFT)) +
     y = "Crime Count"
   ) +
   theme_minimal() +
+  scale_fill_brewer(palette = "Set3") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+filtered_crime <- filtered_crime %>%
+  ungroup(SHIFT)%>%
+  select(-SHIFT)
+filtered_crime <- filtered_crime %>%
+  mutate(
+    LONGITUDE = as.numeric(LONGITUDE),
+    LATITUDE = as.numeric(LATITUDE)
+  )
+
+
+states_map <- map_data("state")
+
+dc_map <- subset(states_map, region == "district of columbia")
+ggplot() +
+  geom_polygon(
+    data = dc_map,
+    aes(x = long, y = lat, group = group),
+    fill = "gray95",
+    color = "black"
+  ) +
+  geom_point(
+    data = filtered_crime,
+    aes(x = LONGITUDE, y = LATITUDE),
+    color = "red",
+    alpha = 0.7,
+    size = 2
+  ) +
+  coord_fixed(1.3) +
+  labs(
+    title = "Crime Locations in Washington, DC",
+    x = "Longitude",
+    y = "Latitude"
+  ) +
+  theme_minimal()
+
+
 ```
 
 
