@@ -22,7 +22,7 @@ data <- data %>%
     METHOD = as.factor(METHOD)
   )
 
-# 1a: Crime frequency by shift
+# 1a
 ggplot(data, aes(x = SHIFT)) +
   geom_bar(fill = "steelblue") +
   labs(
@@ -42,6 +42,8 @@ data %>%
   filter(OFFENSE %in% top_offenses) %>%
   ggplot(aes(x = SHIFT, fill = OFFENSE)) +
   geom_bar(position = "dodge") +
+  theme(axis.text.x=element_blank())+
+  scale_fill_brewer(palette = "Set3")+
   labs(
     title = "Top 5 Crime Types by Shift",
     x = "Shift",
@@ -55,6 +57,8 @@ data %>%
   filter(OFFENSE %in% top_offenses) %>%
   ggplot(aes(x = METHOD, fill = OFFENSE)) +
   geom_bar(position = "dodge") +
+  theme(axis.text.x=element_blank())+
+  scale_fill_brewer(palette = "Set3")+
   facet_wrap(~ OFFENSE, scales = "free_x") +
   labs(
     title = "Common Methods Used by Top 5 Crime Types",
@@ -62,7 +66,6 @@ data %>%
     y = "Number of Crimes",
     fill = "Offense"
   ) +
-  theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # 2b (LOG)
@@ -70,6 +73,8 @@ data %>%
   filter(OFFENSE %in% top_offenses) %>%
   ggplot(aes(x = METHOD, fill = OFFENSE)) +
   geom_bar(position = "dodge") +
+  theme(axis.text.x=element_blank())+
+  scale_fill_brewer(palette = "Set3")+
   facet_wrap(~ OFFENSE, scales = "free_x") +
   scale_y_log10() +
   labs(
@@ -78,6 +83,4 @@ data %>%
     y = "Log10(Number of Crimes)",
     fill = "Offense"
   ) +
-  theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
