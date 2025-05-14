@@ -215,7 +215,7 @@ ggplot(neighborhood_crimes, aes(x = WARD, y = count, fill = OFFENSE)) +
   )
 
 ```
-```{r}
+```{r, echo=FALSE}
 Cluster_crime <- data %>%
   distinct(OFFENSE, NEIGHBORHOOD_CLUSTER, LATITUDE, LONGITUDE)
 
@@ -258,8 +258,16 @@ ggplot() +
   )
 ```
 
-### Question 5
+#### Crime Frequency by Shift (Benjamin Hersch)
+Of particular interest to me when I had initially looked at the data present within the set was the prospect of seeing precisely when certain varieties of crimes are commited, especially so as to identify if there are interesting patterns within the data as to when certain crimes are (or, just as importantly, are not) committed.  
 
+To quickly preface this section, I will reiterate the shift timings:
+
+* Day : 7am - 3pm
+* Evening : 3pm - 11pm
+* Midnight : 11pm - 7am
+
+First examined was a general graph (shown below) that simply measured the overall frequency of crimes committed within each given shift period.  
 ```{r, echo=FALSE}
 
 data <- data %>%
@@ -283,6 +291,10 @@ ggplot(data, aes(x = SHIFT)) +
   theme_minimal()
 
 ```
+
+From here I decided to narrow down my search into only the five most common crime varieties, ditching the less common crimes in favor of sorting them further into which shifts they tend to occur within, hoping that this would help me see any potential trends in crime rates relative to when they occur (such as the disporportionate drop in general theft rates compared to other crimes during the Midnight shift).  
+
+(As an aside here, I do want to briefly touch on the feedback given during the presentation regarding sorting the data by quantity rather than by alphabetical order.  While I do absolutely see the point raised here, that it would be easier to read at a glance by sorting them like that, especially as the order is consistent throughout each shift period, I decided not to do so.  I was concerned that shifting them like this would make it more difficult to read, rather than less, if the data presented otherwise, and wanted to ensure that it was consistent in its order as there is presumably a possibility that, for example, Motor Vehicle Thefts might increase during Midnight, and therefore placing it in order of highest to lowest would, I worry, make it more difficult to read, rather than less, as the order would be inconsistent.)  
 
 ```{r, echo=FALSE}
 
