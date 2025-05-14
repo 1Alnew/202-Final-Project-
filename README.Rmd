@@ -71,6 +71,7 @@ ggplot(
 
 
 ### Does the time of day affect where these crimes are committed? 
+To get a better understanding of the crimes committed, we wanted to see if the time of day and where the crimes were located.
 
 ```{r, echo=FALSE}
 library(RColorBrewer)
@@ -105,9 +106,10 @@ ggplot(top_10_per_shift, aes(x = BLOCK, y = count, fill = SHIFT)) +
 
 
 ```
+By filtering out the top ten locations in comparison to what time of day they happened, it gave a better understanding when it was most common for crimes. It was seen that during the day was the busiest which is logically as it lines up with when people are at work or tourist are around. To get a deeper comparison, I filtered out overlapping locations with time of day and then created a map of the block locations within the DC area.  
 
 ```{r, echo=FALSE}
-
+library(RColorBrewer)
 top_10_per_shift$BLOCK <- sub("___.*$", "", top_10_per_shift$BLOCK)
 
 
@@ -162,29 +164,29 @@ ggplot() +
   geom_polygon(
     data = dc_map,
     aes(x = long, y = lat, group = group),
-    fill = "gray95",
-    color = "black"
+    fill = "gray95", color = "black"
   ) +
   geom_point(
     data = filtered_crime,
-    aes(x = LONGITUDE, y = LATITUDE),
-    color = "red",
-    alpha = 0.7,
-    size = 2
+    aes(x = LONGITUDE, y = LATITUDE, color = BLOCK),  
+    size = 3, alpha = 0.7
   ) +
   coord_fixed(1.3) +
   labs(
-    title = "Crime Locations in Washington, DC",
+    title = "Crime Locations by Block",
     x = "Longitude",
-    y = "Latitude"
+    y = "Latitude",
+    color = "Block"  
   ) +
+  scale_fill_brewer(palette = "Set3") +
   theme_minimal()
+  
 
 
 ```
 
 
-[content
+It was seen that all three times of day had an overlap with block 3100-3900 Block of 14th St NW which is located in the center of DC based on the map. With some research, it was found that location is near the DC National Mall and a major Subway station which explains why it could have higher crime rates between the three times of day. Overall, there was an overlap between 7 locations with the majority being closer into the city. It was observed with outside research that those locations were near subway stations which get high traffic during all three times of day. 
 
 ### Are there known neighborhoods for a certain crime for that area? 
 
