@@ -191,111 +191,71 @@ It was seen that all three times of day had an overlap with block 3100-3900 Bloc
 ### Are there known neighborhoods for a certain crime for that area? 
 
 ```{r, echo=FALSE}
-library(sf)
 library(RColorBrewer)
-library(dplyr)
-library(ggplot2)
-
-
-wards_shapefile <- st_read("/Users/ashlynnprisby/Downloads/Wards_from_2022/Wards_from_2022.shp")
-wards_shapefile <- wards_shapefile %>%
-  mutate(WARD = as.character(WARD))
-
-
 neighborhood_crimes <- data %>%
-  count(OFFENSE, NEIGHBORHOOD_CLUSTER, WARD, name = "count") %>%
-  filter(!is.na(OFFENSE), !is.na(NEIGHBORHOOD_CLUSTER)) %>%
-  mutate(WARD = as.character(WARD))
+  count(OFFENSE,WARD, name = "count")
+
+neighborhood_crimes <- neighborhood_crimes %>%
+  filter(!is.na(OFFENSE), !is.na(WARD))
 
 
-choropleth_data_wards <- wards_shapefile %>%
-  left_join(neighborhood_crimes, by = "WARD")
-
-
-ggplot(data = choropleth_data_wards) +
-  geom_sf(aes(fill = count), color = "white") +  # Use fill for crime count
-  geom_sf_text(aes(label = WARD), color = "white", size = 3, fontface = "bold") +  # Label the wards
-  scale_fill_viridis_c(option = "C") +  # Use a continuous color palette suitable for numerical data
+ggplot(neighborhood_crimes, aes(x = WARD, y = count, fill = OFFENSE)) +
+  geom_col() +
   labs(
-    title = "Crime Counts by Ward",
-    fill = "Crime Count"
+    title = "Crime Count by Neighborhood Cluster and Offense Type",
+    x = "Neighborhood Cluster",
+    y = "Total Crime Count",
+    fill = "Offense"
   ) +
   theme_minimal() +
-  theme(strip.text = element_text(size = 10))
+  scale_fill_brewer(palette = "Set3")+
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+
 ```
 ```{r}
-library(RColorBrewer)
 Cluster_crime <- data %>%
   distinct(OFFENSE, NEIGHBORHOOD_CLUSTER, LATITUDE, LONGITUDE)
-Cluster_crime <- Cluster_crime %>%
-  filter(!is.na(OFFENSE), !is.na(NEIGHBORHOOD_CLUSTER))
 
-ggplot(Cluster_crime, aes(x = LONGITUDE, y = LATITUDE, color = OFFENSE)) +
-  geom_point(size = 3, alpha = 0.7) +  
-  facet_wrap(~ NEIGHBORHOOD_CLUSTER) +  
+states_map <- map_data("state")
+dc_map <- subset(states_map, region == "district of columbia")
+
+# Get min/max for zooming
+lon_range <- range(Cluster_crime$LONGITUDE, na.rm = TRUE)
+lat_range <- range(Cluster_crime$LATITUDE, na.rm = TRUE)
+
+ggplot() +
+  geom_polygon(
+    data = dc_map,
+    aes(x = long, y = lat, group = group),
+    fill = "gray95", color = "black"
+  ) +
+  geom_point(
+    data = Cluster_crime,
+    aes(x = LONGITUDE, y = LATITUDE, color = NEIGHBORHOOD_CLUSTER),
+    size = 3, alpha = 0.7
+  ) +
+  facet_wrap(~ OFFENSE) +
+  coord_fixed(1.3, 
+              xlim = lon_range,
+              ylim = lat_range) +
   labs(
     title = "Crime Locations by Neighborhood Cluster and Offense Type",
     x = "Longitude",
     y = "Latitude",
     color = "Neighborhood Cluster"
   ) +
-  scale_color_brewer(palette = "Set3") +  
-  theme_minimal() + 
+  scale_color_brewer(palette = "Set3") +
+  theme_minimal() +
   theme(
-    strip.text = element_text(size = 10), 
-    legend.position = "right" 
+    strip.text = element_text(size = 12, face = "bold"),
+    axis.text = element_text(size = 10),
+    legend.position = "right",
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 12, face = "italic")
   )
-```
-
-
-[content]
-
-```{r, echo=FALSE}
-
-data <- data %>%
-  filter(!is.na(SHIFT), !is.na(OFFENSE), !is.na(METHOD))
-
-data <- data %>%
-  mutate(
-    SHIFT = as.factor(SHIFT),
-    OFFENSE = as.factor(OFFENSE),
-    METHOD = as.factor(METHOD)
-  )
-
-# 1a
-ggplot(data, aes(x = SHIFT)) +
-  geom_bar(fill = "steelblue") +
-  labs(
-    title = "Crime Frequency by Shift",
-    x = "Shift",
-    y = "Number of Crimes"
-  ) +
-  theme_minimal()
-
-```
-
-```{r, echo=FALSE}
-
-# 1b
-top_offenses <- data %>%
-  count(OFFENSE, sort = TRUE) %>%
-  top_n(5, n) %>%
-  pull(OFFENSE)
-
-data %>%
-  filter(OFFENSE %in% top_offenses) %>%
-  ggplot(aes(x = SHIFT, fill = OFFENSE)) +
-  geom_bar(position = "dodge") +
-  theme(axis.text.x=element_blank())+
-  scale_fill_brewer(palette = "Set3")+
-  labs(
-    title = "Top 5 Crime Types by Shift",
-    x = "Shift",
-    y = "Number of Crimes",
-    fill = "Offense Type"
-  ) +
-  theme_minimal()
-
 ```
 
 [content]
