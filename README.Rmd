@@ -191,27 +191,33 @@ It was seen that all three times of day had an overlap with block 3100-3900 Bloc
 ### Are there known neighborhoods for a certain crime for that area? 
 
 ```{r, echo=FALSE}
+library(sf)
+library(RColorBrewer)
 neighborhood_crimes <- data %>%
-  count(OFFENSE,NEIGHBORHOOD_CLUSTER, name = "count")
+  count(OFFENSE,NEIGHBORHOOD_CLUSTER,WARD, name = "count")
 
 neighborhood_crimes <- neighborhood_crimes %>%
   filter(!is.na(OFFENSE), !is.na(NEIGHBORHOOD_CLUSTER))
 
 
-ggplot(neighborhood_crimes, aes(x = NEIGHBORHOOD_CLUSTER, y = count, fill = OFFENSE)) +
-  geom_col() +
-  labs(
-    title = "Crime Count by Neighborhood Cluster and Offense Type",
-    x = "Neighborhood Cluster",
-    y = "Total Crime Count",
-    fill = "Offense"
-  ) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = "bottom"
-  )
 
+wards_shapefile <- st_read("/Users/ashlynnprisby/Downloads/Wards_from_2022/Wards_from_2022.shp")
+wards_shapefile <- wards_shapefile %>%
+  mutate(WARD = as.character(WARD))
+
+neighborhood_crimes <- neighborhood_crimes %>%
+  mutate(WARD = as.character(WARD))
+choropleth_data_wards <- wards_shapefile %>%
+  left_join(neighborhood_crimes, by = "WARD")
+
+ggplot(data = choropleth_data_wards) +
+  geom_sf(aes(fill = count), color = "white") +
+  geom_sf_text(aes(label = WARD), color = "white",     
+               size = 3, fontface = "bold") +
+  scale_fill_viridis_c() +                      
+  labs(title = "Crime Counts by Ward",
+       fill = "Crime Count") +
+  theme_minimal()
 ```
 
 
