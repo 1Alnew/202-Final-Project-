@@ -258,7 +258,7 @@ ggplot() +
   )
 ```
 
-#### Crime Frequency by Shift (Benjamin Hersch)
+#### Crime Frequency by Shift (Benjamin Herschel)
 Of particular interest to me when I had initially looked at the data present within the set was the prospect of seeing precisely when certain varieties of crimes are commited, especially so as to identify if there are interesting patterns within the data as to when certain crimes are (or, just as importantly, are not) committed.  
 
 To quickly preface this section, I will reiterate the shift timings:
@@ -320,14 +320,15 @@ data %>%
 
 ```
 
+#### Common Methodology Between Crime Varieties (Benjamin Herschel)
+Now that I had identified the frequency of various crimes relative to when they are committed, the obvious follow up seemed, to me at least, to be to look at how they were committed, identifying common methodology within specific crimes.  
+When I did create the the chart, it became readily apparent that the crime numbers are too widely distributed to be properly useful in a visual graphic, so I chose to take the log(10) of the numbers to try to condense the variation a little bit.  
 
-[content]
-
-### Question 6 
+Here is also where the shortcomings in the data become readily apparent, as the lackluster variety of information on crime methodology means that while the data is interesting, it does leave much to be desired in terms of actual conclusions that can be drawn.  
 
 ```{r, echo=FALSE}
 
-# 2b
+# 2a
 data %>%
   filter(OFFENSE %in% top_offenses) %>%
   ggplot(aes(x = METHOD, fill = OFFENSE)) +
@@ -369,7 +370,6 @@ data %>%
 
 ```
 
-[content]
 
 ### How many and what crimes occur near the White House and Capitol?
 
