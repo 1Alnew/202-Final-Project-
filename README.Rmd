@@ -205,7 +205,7 @@ wards_shapefile <- wards_shapefile %>%
 neighborhood_crimes <- data %>%
   count(OFFENSE, NEIGHBORHOOD_CLUSTER, WARD, name = "count") %>%
   filter(!is.na(OFFENSE), !is.na(NEIGHBORHOOD_CLUSTER)) %>%
-  mutate(WARD = as.character(WARD))  # Ensure WARD is character type for joining
+  mutate(WARD = as.character(WARD))
 
 
 choropleth_data_wards <- wards_shapefile %>%
@@ -224,7 +224,27 @@ ggplot(data = choropleth_data_wards) +
   theme(strip.text = element_text(size = 10))
 ```
 ```{r}
+library(RColorBrewer)
+Cluster_crime <- data %>%
+  distinct(OFFENSE, NEIGHBORHOOD_CLUSTER, LATITUDE, LONGITUDE)
+Cluster_crime <- Cluster_crime %>%
+  filter(!is.na(OFFENSE), !is.na(NEIGHBORHOOD_CLUSTER))
 
+ggplot(Cluster_crime, aes(x = LONGITUDE, y = LATITUDE, color = OFFENSE)) +
+  geom_point(size = 3, alpha = 0.7) +  
+  facet_wrap(~ NEIGHBORHOOD_CLUSTER) +  
+  labs(
+    title = "Crime Locations by Neighborhood Cluster and Offense Type",
+    x = "Longitude",
+    y = "Latitude",
+    color = "Neighborhood Cluster"
+  ) +
+  scale_color_brewer(palette = "Set3") +  
+  theme_minimal() + 
+  theme(
+    strip.text = element_text(size = 10), 
+    legend.position = "right" 
+  )
 ```
 
 
