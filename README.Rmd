@@ -11,11 +11,7 @@ library(RColorBrewer)
 ```
 
 # Washington DC Crime Analysis
-<<<<<<< HEAD
-## Adrian Newgard, Benjamin , Ashlynn Prisby  
-=======
 ## Adrian Newgard, Benjamin Herschel, Ashlynn 
->>>>>>> d7f778a3d7f15b741d70021c63caca11c743e90a
 
 As the nation's capitol, Washington, D.C. is an interesting area to study socially. In addition to being the capitol, the city is also part of a large metropolis and contains the usual economic variations therein. This analysis is focused on incidences of crime in Washington. It will consider economic, locational, and temporal factors to take a closer look at the kinds of crime that occur in one of the world's most important cities. 
 
