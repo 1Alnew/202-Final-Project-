@@ -1,6 +1,6 @@
 ---
 title: "Washington DC Crime Analysis"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -203,18 +203,24 @@ ggplot(neighborhood_crimes, aes(x = WARD, y = count, fill = OFFENSE)) +
   geom_col() +
   labs(
     title = "Crime Count by Neighborhood Cluster and Offense Type",
-    x = "Neighborhood Cluster",
+    x = "Neighborhood Ward",
     y = "Total Crime Count",
     fill = "Offense"
   ) +
   theme_minimal() +
   scale_fill_brewer(palette = "Set3")+
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = "bottom"
-  )
+   theme(
+    axis.text.x = element_text(angle = 30, hjust = 1),
+    legend.position = "bottom",
+    legend.text = element_text(size = 8),  # Reduce legend text size for clarity
+    plot.title = element_text(size = 16, face = "bold")  # Bold and increase title size
+  ) +
+  guides(fill = guide_legend(label.position = "bottom", label.hjust = 0.5))
 
 ```
+
+Washington DC is split into 8 wards that I then compared to different crime types that have been reported. It is seen that Ward 1 and 2 have the highest crime rate with theft/other being the majority of crimes committed. When doing further research, it was seen that these two wards had large tourist areas along with major subway stops that people frequent. It would explain why the crime rate is much higher since with a large amount of people visiting these areas crime is expected to be higher. It also explains why theft from cars is the second highest since these areas contain lots of street parking within the local neighborhoods where crime could be heavy.  
+
 ```{r, echo=FALSE}
 Cluster_crime <- data %>%
   distinct(OFFENSE, NEIGHBORHOOD_CLUSTER, LATITUDE, LONGITUDE)
@@ -404,6 +410,7 @@ capitol %>%  ggplot(
 We see that there are many more crimes recorded around Capitol Hill than the White House. Total, there are 437. There a couple of possibilities for why this might be. One could be that the heavier security at the White House acts to keep more criminals away from the building than does the security at the Capitol. It could also be that there is simply more opportunity to commit crims in the Capitol Hill area.
 
 ## Conclusion
+It is clear that DC crime is not tied to a certain factor and is influenced by many factors. While crime was evident during the day it was still prominent during all hours of the day which could be due to not only the area but the people residing in that area. DC is known for being a tourist, working, and residential areas with many people coming to visit during different times. It does show within the graphs and data but there are still neighborhoods who have higher crime rate that may just not get reported since they are not close to tourist or busy areas. DC still has the same crime rates as other larger cities may have with only a few anomalies. 
 
 It is evident that the uniqueness of Washington's purpose as a city leads to some unexpected occurences in the data. The presence of the seats of government in the city--the White House, the Capitol, etc.--leads to increased presence around those areas. The result is an uneven police distribution across the city in a manner different from other cities. However, D.C. suffers similar problems to other cities. 
 
