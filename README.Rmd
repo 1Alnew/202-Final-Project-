@@ -258,9 +258,60 @@ ggplot() +
   )
 ```
 
+### Question 5
+
+```{r, echo=FALSE}
+
+data <- data %>%
+  filter(!is.na(SHIFT), !is.na(OFFENSE), !is.na(METHOD))
+
+data <- data %>%
+  mutate(
+    SHIFT = as.factor(SHIFT),
+    OFFENSE = as.factor(OFFENSE),
+    METHOD = as.factor(METHOD)
+  )
+
+# 1a
+ggplot(data, aes(x = SHIFT)) +
+  geom_bar(fill = "steelblue") +
+  labs(
+    title = "Crime Frequency by Shift",
+    x = "Shift",
+    y = "Number of Crimes"
+  ) +
+  theme_minimal()
+
+```
+
+```{r, echo=FALSE}
+
+# 1b
+top_offenses <- data %>%
+  count(OFFENSE, sort = TRUE) %>%
+  top_n(5, n) %>%
+  pull(OFFENSE)
+
+data %>%
+  filter(OFFENSE %in% top_offenses) %>%
+  ggplot(aes(x = SHIFT, fill = OFFENSE)) +
+  geom_bar(position = "dodge") +
+  theme(axis.text.x=element_blank())+
+  scale_fill_brewer(palette = "Set3")+
+  labs(
+    title = "Top 5 Crime Types by Shift",
+    x = "Shift",
+    y = "Number of Crimes",
+    fill = "Offense Type"
+  ) +
+  theme_minimal()
+
+```
+
+
 [content]
 
-### Question 5 
+### Question 6 
 
 ```{r, echo=FALSE}
 
