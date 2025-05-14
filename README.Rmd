@@ -406,3 +406,5 @@ We see that there are many more crimes recorded around Capitol Hill than the Whi
 ## Conclusion
 
 It is evident that the uniqueness of Washington's purpose as a city leads to some unexpected occurences in the data. The presence of the seats of government in the city--the White House, the Capitol, etc.--leads to increased presence around those areas. The result is an uneven police distribution across the city in a manner different from other cities. However, D.C. suffers similar problems to other cities. 
+
+Additionally, we can see clear divisions in the crime rates both in regards to variety, timing, and methodology, throughout the data.  This allows us to better understand how future trends might play out, as well as giving us an idea of how to best work to prevent undue risk moving forward.  
